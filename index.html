@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10100e">
+  <title>COUNTDOWN</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800;900&display=swap');
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      min-height: 100vh; overflow: hidden; display: grid; place-items: center;
+      background:
+        linear-gradient(180deg, rgba(8,9,8,.25), rgba(8,9,8,.92)),
+        radial-gradient(ellipse at 50% 105%, #6b311c 0%, #252018 38%, #10100e 78%);
+      color: #f5e9cf; font-family: "Vazirmatn", Tahoma, sans-serif;
+    }
+    body::before {
+      content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .18;
+      background-image: repeating-linear-gradient(0deg, transparent 0 3px, #fff 4px);
+      mix-blend-mode: soft-light;
+    }
+    .scene { position: fixed; inset: 0; overflow: hidden; pointer-events: none; }
+    .sun {
+      position: absolute; width: min(65vw, 520px); aspect-ratio: 1; border-radius: 50%;
+      left: 50%; top: 17%; transform: translateX(-50%);
+      background: linear-gradient(145deg, #f8c46a, #d65c32 68%, #8b3426);
+      box-shadow: 0 0 100px #d65c3260;
+      opacity: .88;
+    }
+    .sun::after {
+      content: ""; position: absolute; inset: 0; border-radius: inherit;
+      background: repeating-linear-gradient(to bottom, transparent 0 17px, #251915 18px 24px);
+      mask-image: linear-gradient(to bottom, transparent 28%, #000 58%);
+    }
+    . skyline {
+      position: absolute; bottom: 0; left: -5%; width: 110%; height: 36%;
+      background: linear-gradient(180deg,#161713,#090a09);
+      clip-path: polygon(0 36%,5% 36%,5% 20%,9% 20%,9% 42%,14% 42%,14% 10%,19% 10%,19% 34%,23% 34%,23% 25%,29% 25%,29% 45%,34% 45%,34% 0,39% 0,39% 37%,44% 37%,44% 18%,49% 18%,49% 43%,55% 43%,55% 13%,60% 13%,60% 39%,65% 39%,65% 23%,71% 23%,71% 45%,77% 45%,77% 8%,82% 8%,82% 36%,88% 36%,88% 19%,94% 19%,94% 43%,100% 43%,100% 100%,0 100%);
+      opacity: .9;
+    }
+    .wrap { position: relative; z-index: 1; width: min(920px, 92vw); text-align: center; padding: 32px 0; }
+    .eyebrow {
+      color: #e9b85f; font-weight: 900; letter-spacing: .32em; font-size: clamp(12px,2vw,16px);
+      text-shadow: 0 2px 14px #000; direction: ltr;
+    }
+    h1 {
+      direction: ltr; margin: 10px 0 38px; font-family: Impact, "Arial Black", sans-serif;
+      font-size: clamp(48px, 10vw, 104px); line-height: .95; font-weight: 900;
+      letter-spacing: -.055em; color: #fff1d4;
+      -webkit-text-stroke: 1px #2a1a13;
+      text-shadow: 3px 4px 0 #8d3c26, 6px 8px 0 #17120f, 0 14px 35px #000b;
+    }
+    .timer { display: grid; grid-template-columns: repeat(4,1fr); gap: clamp(8px,2vw,18px); direction: ltr; }
+    .unit {
+      position: relative; padding: clamp(16px,3vw,28px) 5px 18px;
+      background: linear-gradient(145deg, #25231dE8, #0e100feF);
+      border: 1px solid #d8a85b70; box-shadow: 0 14px 35px #0008, inset 0 1px #fff2;
+      transform: skewY(-1deg);
+    }
+    .number {
+      display: block; font-family: Impact, "Arial Black", sans-serif;
+      font-size: clamp(38px, 8.5vw, 88px); line-height: 1; color: #f7d58c;
+      font-variant-numeric: tabular-nums; text-shadow: 0 3px 0 #7e3924, 0 8px 22px #000;
+    }
+    .label { display: block; margin-top: 12px; color: #c6bba4; font-size: clamp(10px,1.7vw,14px); font-weight: 800; letter-spacing: .12em; }
+    .glow { width: 90px; height: 2px; margin: 28px auto 0; background: #e4a94f; box-shadow: 0 0 18px #e4a94f; }
+    @media (max-width: 520px) {
+      .wrap { width: 94vw; }
+      h1 { margin-bottom: 28px; }
+      .timer { gap: 6px; }
+      .unit { padding: 16px 2px 13px; }
+      .label { letter-spacing: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="scene"><div class="sun"></div><div class="skyline"></div></div>
+  <main class="wrap" aria-label="Countdown">
+    <div class="eyebrow">THE WAIT IS ALMOST OVER</div>
+    <h1>GRAND THEFT AUTO</h1>
+    <section class="timer" aria-live="off">
+      <div class="unit"><span class="number" id="days">00</span><span class="label">DAYS</span></div>
+      <div class="unit"><span class="number" id="hours">00</span><span class="label">HOURS</span></div>
+      <div class="unit"><span class="number" id="minutes">00</span><span class="label">MINUTES</span></div>
+      <div class="unit"><span class="number" id="seconds">00</span><span class="label">SECONDS</span></div>
+    </section>
+    <div class="glow"></div>
+  </main>
+  <script>
+    // 27 Aban 1405, 14:30 in New Zealand (Auckland time).
+    const target = new Date("2026-11-18T14:30:00+13:00").getTime();
+    const pad = n => String(n).padStart(2, "0");
+    function update() {
+      let left = Math.max(0, target - Date.now());
+      const days = Math.floor(left / 86400000); left %= 86400000;
+      const hours = Math.floor(left / 3600000); left %= 3600000;
+      const minutes = Math.floor(left / 60000); left %= 60000;
+      const seconds = Math.floor(left / 1000);
+      document.getElementById("days").textContent = pad(days);
+      document.getElementById("hours").textContent = pad(hours);
+      document.getElementById("minutes").textContent = pad(minutes);
+      document.getElementById("seconds").textContent = pad(seconds);
+    }
+    update(); setInterval(update, 1000);
+  </script>
+</body>
+</html>
